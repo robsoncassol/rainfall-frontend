@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # Rainfall Dashboard Frontend
+  rainfall-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rainfall-dashboard
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - rainfall-network
+
+  # Optional: Rainfall API Backend (uncomment if you want to include the API)
+  # rainfall-api:
+  #   image: your-rainfall-api:latest
+  #   container_name: rainfall-api
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - SPRING_PROFILES_ACTIVE=production
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 60s
+  #   networks:
+  #     - rainfall-network
+
+  # Optional: Nginx reverse proxy (for production with API)
+  # nginx-proxy:
+  #   image: nginx:alpine
+  #   container_name: nginx-proxy
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx-proxy.conf:/etc/nginx/nginx.conf:ro
+  #     - ./ssl:/etc/nginx/ssl:ro
+  #   depends_on:
+  #     - rainfall-frontend
+  #     - rainfall-api
+  #   restart: unless-stopped
+  #   networks:
+  #     - rainfall-network
+
+networks:
+  rainfall-network:
+    driver: bridge
+
+# Optional: Volumes for persistent data
+# volumes:
+#   rainfall-data:
+#     driver: local 
