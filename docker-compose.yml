@@ -1,17 +1,15 @@
-version: '3.8'
-
 services:
   # Rainfall Dashboard Frontend
   rainfall-frontend:
     image: ghcr.io/robsoncassol/rainfall-frontend/rainfall-dashboard:latest
     container_name: rainfall-dashboard
     ports:
-      - "3000:80"
+      - "3000:3001"
     environment:
       - NODE_ENV=production
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
       interval: 30s
       timeout: 10s
       retries: 3
