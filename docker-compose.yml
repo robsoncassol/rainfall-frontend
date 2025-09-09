@@ -3,9 +3,7 @@ version: '3.8'
 services:
   # Rainfall Dashboard Frontend
   rainfall-frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/robsoncassol/rainfall-frontend/rainfall-dashboard:latest
     container_name: rainfall-dashboard
     ports:
       - "3000:80"
